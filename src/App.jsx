@@ -1,5 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import './index.css';
+import timeArticle from './content/blogs/has-time-really-sped-up.md?raw';
+import aiArticle from './content/blogs/ai-is-a-tool-not-your-master.md?raw';
+import workingWifeArticle from './content/blogs/working-wife-kitchen-lessons.md?raw';
+import wishArticle from './content/blogs/think-as-your-wish.md?raw';
 
 const worlds = [
   { id: 'reads', label: 'Good Reads', icon: '◒', hint: 'The library' },
@@ -15,17 +19,36 @@ const shelves = {
     { title: 'The Gentle Art of Saying No', read: '5 min', color: '#e4af55' },
   ],
   'Dealing with AI': [
-    { title: 'Making Peace With the Machine', read: '6 min', color: '#648a78' },
+    { title: 'AI Is A Tool, Not Your Master', read: '3 min', color: '#648a78' },
     { title: 'Human, Still', read: '4 min', color: '#a56551' },
   ],
   'Work Lessons': [
-    { title: 'Notes From the Messy Middle', read: '8 min', color: '#5f7896' },
+    { title: 'Working Wife — Kitchen Lessons', read: '4 min', color: '#5f7896' },
     { title: 'Meetings That Could Be Gardens', read: '5 min', color: '#98704d' },
   ],
   'Personal Philosophies': [
-    { title: 'A Small Life, Fully Noticed', read: '9 min', color: '#7c6b8d' },
+    { title: 'Think as Your Wish', read: '3 min', color: '#7c6b8d' },
     { title: 'Choose Wonder', read: '3 min', color: '#6c8b55' },
   ],
+};
+
+const publishedPosts = {
+  'Has Time Really Sped Up?': {
+    content: timeArticle,
+    linkedIn: 'https://www.linkedin.com/pulse/has-time-really-sped-up-anjali-vashisth-rl4lf/',
+  },
+  'AI Is A Tool, Not Your Master': {
+    content: aiArticle,
+    linkedIn: 'https://www.linkedin.com/pulse/ai-tool-your-master-finding-peace-digital-age-anjali-vashisth-oftec/',
+  },
+  'Working Wife — Kitchen Lessons': {
+    content: workingWifeArticle,
+    linkedIn: 'https://www.linkedin.com/pulse/working-wife-kitchen-lessons-data-engineering-anjali-vashisth-hjbzc/',
+  },
+  'Think as Your Wish': {
+    content: wishArticle,
+    linkedIn: 'https://www.linkedin.com/pulse/think-your-wish-anjali-vashisth/',
+  },
 };
 
 const gamePrompts = {
@@ -107,11 +130,14 @@ function Home({ setPage }) {
 
 function Reads() {
   const [post, setPost] = useState(null);
-  const defaultText = 'There are days when an hour disappears in a blink, and others when a minute stretches forever. Perhaps time hasn’t sped up — perhaps our attention has become more crowded.\n\nThis is your writing space. Replace these words with your own reflections, stories and lessons.';
-  const [text, setText] = useState(defaultText);
-  const openPost = (book) => { setText(localStorage.getItem(`vv-post-${book.title}`) || defaultText); setPost(book); };
-  if (post) return <section className="world article-world"><button className="back" onClick={() => setPost(null)}>← Back to the library</button><article><p className="eyebrow">READING ROOM · {post.read} READ</p><h1>{post.title}</h1><p className="article-lead">A reflection on attention, pace, and making room for what matters.</p><div className="article-rule">❧</div><textarea aria-label="Article content" value={text} onChange={e => setText(e.target.value)} /><footer><button className="primary" onClick={() => localStorage.setItem(`vv-post-${post.title}`, text)}>Save my post</button><a href="https://www.linkedin.com/" target="_blank" rel="noreferrer">Continue the conversation on LinkedIn ↗</a></footer></article></section>;
-  return <section className="world library-world"><PageHeader eyebrow="THE READING ROOM" title="Stories live here." copy="Pull up a chair. Stay as long as you like."/><div className="library-scene"><div className="library-window">☾</div><div className="lamp">◉</div>{Object.entries(shelves).map(([name, books], si) => <div className="shelf" key={name}><h2><span>0{si+1}</span>{name}</h2><div className="books">{books.map((book, bi) => <button key={book.title} onClick={() => openPost(book)} style={{'--book': book.color}}><i>{bi % 2 ? '✦' : '❦'}</i><b>{book.title}</b><small>{book.read} read　→</small></button>)}</div></div>)}</div></section>;
+  const article = post ? publishedPosts[post.title] : null;
+  const renderArticle = (content) => content.split(/\n+/).filter(Boolean).map((block, index) => {
+    if (block.startsWith('# ')) return null;
+    if (block.startsWith('## ')) return <h2 key={index}>{block.slice(3)}</h2>;
+    return <p key={index}>{block}</p>;
+  });
+  if (post) return <section className="world article-world"><button className="back" onClick={() => setPost(null)}>← Back to the library</button><article><p className="eyebrow">READING ROOM · {post.read} READ</p><h1>{post.title}</h1><p className="article-lead">A reflection on attention, pace, and making room for what matters.</p><div className="article-rule">❧</div><div className="article-scroll">{article ? renderArticle(article.content) : <div className="coming-soon"><span>❧</span><h2>This story is still being written.</h2><p>Add its Markdown file to the blog content folder when it is ready.</p></div>}</div><footer>{article && <a className="primary" href={article.linkedIn} target="_blank" rel="noreferrer">Read the original on LinkedIn ↗</a>}</footer></article></section>;
+  return <section className="world library-world"><PageHeader eyebrow="THE READING ROOM" title="Stories live here." copy="Pull up a chair. Stay as long as you like."/><div className="library-scene"><div className="library-window">☾</div><div className="lamp">◉</div>{Object.entries(shelves).map(([name, books], si) => <div className="shelf" key={name}><h2><span>0{si+1}</span>{name}</h2><div className="books">{books.map((book, bi) => <button key={book.title} onClick={() => setPost(book)} style={{'--book': book.color}}><i>{bi % 2 ? '✦' : '❦'}</i><b>{book.title}</b><small>{book.read} read　→</small></button>)}</div></div>)}</div></section>;
 }
 
 function Games() {
