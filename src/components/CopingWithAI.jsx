@@ -1,129 +1,105 @@
-import { useState } from 'react';
-import { copingBlogs } from '../data/blogsData';
+import { useEffect } from 'react';
 import '../styles/components.css';
 
-export default function CopingWithAI() {
-  const [selectedBlog, setSelectedBlog] = useState(null);
-  const [filterCategory, setFilterCategory] = useState('all');
+const myBlogs = [
+  {
+    title: 'Has time really sped up?',
+    url: 'https://www.linkedin.com/pulse/has-time-really-sped-up-anjali-vashisth-rl4lf/'
+  },
+  {
+    title: 'AI tool your master? Finding peace in the digital age',
+    url: 'https://www.linkedin.com/pulse/ai-tool-your-master-finding-peace-digital-age-anjali-vashisth-oftec/?trackingId=kojKXWVcReCvPaTAQYOlRQ%3D%3D'
+  },
+  {
+    title: 'Working wife, kitchen lessons & data engineering',
+    url: 'https://www.linkedin.com/pulse/working-wife-kitchen-lessons-data-engineering-anjali-vashisth-hjbzc/?trackingId=kojKXWVcReCvPaTAQYOlRQ%3D%3D'
+  },
+  {
+    title: 'Think your wish',
+    url: 'https://www.linkedin.com/pulse/think-your-wish-anjali-vashisth/?trackingId=kojKXWVcReCvPaTAQYOlRQ%3D%3D'
+  }
+];
 
-  const categories = ['all', 'Exercise', 'Coping', 'Learning'];
-  const filteredBlogs = filterCategory === 'all' 
-    ? copingBlogs 
-    : copingBlogs.filter(blog => blog.category === filterCategory);
+const funIdeas = [
+  'Mystery scavenger hunt with hidden clues in every corner',
+  'Wizard trivia showdown with house points and tiny rewards',
+  'Human bingo where teams make the funniest match-ups',
+  'Choreographed dance-off with a spotlight moment for every team'
+];
+
+export default function CopingWithAI({ activeTab = 'myblogs' }) {
+  useEffect(() => {
+    const section = document.getElementById(activeTab);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [activeTab]);
 
   return (
-    <div className="section coping-section">
-      <div className="section-header">
-        <h2>💪 Coping with AI</h2>
-        <p>Learn, practice, and grow with AI through exercises and mindful exploration</p>
+    <div className="section magical-section">
+      <div className="magical-hero">
+        <div className="hero-copy">
+          <p className="eyebrow">A hidden corner of calm, color, and magic</p>
+          <h2>Welcome to my little Hogwarts-inspired world</h2>
+          <p>
+            This page holds the story of my writing, the joy of team play, and a quiet place for
+            the part of me that is still being discovered.
+          </p>
+        </div>
+
+        <div className="music-player-card">
+          <span className="music-label">🎵 Background music</span>
+          <audio controls loop preload="none" className="magic-audio">
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg" />
+          </audio>
+        </div>
       </div>
 
-      <div className="coping-intro">
-        <div className="intro-card">
-          <h3>🎯 What You'll Learn</h3>
-          <ul>
-            <li>Practical exercises to build AI literacy</li>
-            <li>Strategies to overcome AI anxiety</li>
-            <li>How to choose the right tools for your needs</li>
-            <li>Ethical considerations in AI usage</li>
-            <li>Real-world applications and best practices</li>
+      <div className="magic-grid">
+        <section id="myblogs" className="magic-card">
+          <div className="card-heading">
+            <span>🪄</span>
+            <h3>My Blogs</h3>
+          </div>
+          <div className="scrollable-stack">
+            {myBlogs.map((blog) => (
+              <a
+                key={blog.title}
+                className="story-link"
+                href={blog.url}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <span>{blog.title}</span>
+                <small>Open article ↗</small>
+              </a>
+            ))}
+          </div>
+        </section>
+
+        <section id="team" className="magic-card">
+          <div className="card-heading">
+            <span>🎮</span>
+            <h3>Fun Time Ideas with Team</h3>
+          </div>
+          <ul className="idea-list">
+            {funIdeas.map((idea) => (
+              <li key={idea}>{idea}</li>
+            ))}
           </ul>
-        </div>
-      </div>
+          <div className="organise-tag">Tag below: organise a game for more than 50 people</div>
+        </section>
 
-      <div className="blogs-filter">
-        <h3>📂 Filter by Category</h3>
-        <div className="filter-buttons">
-          {categories.map(cat => (
-            <button
-              key={cat}
-              className={`filter-btn ${filterCategory === cat ? 'active' : ''}`}
-              onClick={() => setFilterCategory(cat)}
-            >
-              {cat === 'all' ? 'All Articles' : cat}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="blogs-container">
-        <div className="blogs-list">
-          {filteredBlogs.map(blog => (
-            <div
-              key={blog.id}
-              className={`blog-card ${selectedBlog?.id === blog.id ? 'expanded' : ''}`}
-              onClick={() => setSelectedBlog(selectedBlog?.id === blog.id ? null : blog)}
-            >
-              <div className="blog-header">
-                <div>
-                  <h3>{blog.title}</h3>
-                  <div className="blog-meta">
-                    <span className="category-badge">{blog.category}</span>
-                    <span className="difficulty-badge">{blog.difficulty}</span>
-                    <span className="read-time">📖 {blog.readTime}</span>
-                  </div>
-                </div>
-                <span className="expand-icon">
-                  {selectedBlog?.id === blog.id ? '▼' : '▶'}
-                </span>
-              </div>
-
-              {selectedBlog?.id === blog.id && (
-                <div className="blog-content">
-                  <div className="markdown-content">
-                    {blog.content.split('\n').map((line, idx) => {
-                      if (line.startsWith('# ')) return <h2 key={idx}>{line.substring(2)}</h2>;
-                      if (line.startsWith('## ')) return <h3 key={idx}>{line.substring(3)}</h3>;
-                      if (line.startsWith('- ')) return <li key={idx}>{line.substring(2)}</li>;
-                      if (line.trim() === '') return <br key={idx} />;
-                      return <p key={idx}>{line}</p>;
-                    })}
-                  </div>
-
-                  <div className="blog-tips">
-                    <h4>💡 Key Tips</h4>
-                    <ul>
-                      {blog.tips.map((tip, idx) => (
-                        <li key={idx}>{tip}</li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div className="blog-footer">
-                    <span className="blog-date">📅 {new Date(blog.date).toLocaleDateString()}</span>
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-
-        <div className="blogs-sidebar">
-          <div className="sidebar-card">
-            <h3>🌟 Featured Insight</h3>
-            <p>The key to thriving in an AI-powered world is continuous learning and adaptation. Start with one tool, master it, then expand.</p>
+        <section id="side" className="magic-card placeholder-card">
+          <div className="card-heading">
+            <span>🌙</span>
+            <h3>Another Side of Me</h3>
           </div>
-
-          <div className="sidebar-card">
-            <h3>✅ Action Items</h3>
-            <ul>
-              <li>✓ Read one blog this week</li>
-              <li>✓ Try one exercise daily</li>
-              <li>✓ Join the community</li>
-              <li>✓ Share your progress</li>
-            </ul>
-          </div>
-
-          <div className="sidebar-card">
-            <h3>🎓 Learning Path</h3>
-            <ol>
-              <li>Beginner exercises first</li>
-              <li>Learn about AI ethics</li>
-              <li>Build your toolkit</li>
-              <li>Share with others</li>
-            </ol>
-          </div>
-        </div>
+          <p>
+            This space is reserved for the quieter, deeper, and more personal pieces of me. It will
+            be filled later with stories, snapshots, and reflections.
+          </p>
+        </section>
       </div>
     </div>
   );

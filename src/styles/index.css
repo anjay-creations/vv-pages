@@ -21,10 +21,45 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background:
+    radial-gradient(circle at top left, rgba(255, 221, 135, 0.38), transparent 20%),
+    radial-gradient(circle at top right, rgba(153, 102, 255, 0.4), transparent 25%),
+    linear-gradient(135deg, #130b2f 0%, #2c1b5f 45%, #6f3f99 100%);
   color: var(--text-primary);
   line-height: 1.6;
   min-height: 100vh;
+  position: relative;
+}
+
+body::before,
+body::after {
+  content: '🕊️';
+  position: fixed;
+  top: 10%;
+  font-size: 2rem;
+  opacity: 0.5;
+  animation: birdFloat 12s linear infinite;
+  pointer-events: none;
+}
+
+body::after {
+  content: '🦉';
+  top: 18%;
+  right: 8%;
+  animation-duration: 16s;
+  opacity: 0.4;
+}
+
+@keyframes birdFloat {
+  0% {
+    transform: translateX(-10px) translateY(0);
+  }
+  50% {
+    transform: translateX(24px) translateY(-8px);
+  }
+  100% {
+    transform: translateX(-10px) translateY(0);
+  }
 }
 
 .app-container {

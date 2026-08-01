@@ -5,40 +5,32 @@ export default function Navigation({ activeTab, setActiveTab }) {
     <nav className="navbar">
       <div className="navbar-container">
         <div className="navbar-logo">
-          <span className="logo-icon">🤖</span>
-          <h1>AI Knowledge Hub</h1>
+          <span className="logo-icon">�</span>
+          <h1>Magical Corner</h1>
         </div>
         <ul className="nav-menu">
           <li>
             <button
-              className={`nav-link ${activeTab === 'history' ? 'active' : ''}`}
-              onClick={() => setActiveTab('history')}
+              className={`nav-link ${activeTab === 'myblogs' ? 'active' : ''}`}
+              onClick={() => setActiveTab('myblogs')}
             >
-              📚 History
+              🪄 My Blogs
             </button>
           </li>
           <li>
             <button
-              className={`nav-link ${activeTab === 'current' ? 'active' : ''}`}
-              onClick={() => setActiveTab('current')}
+              className={`nav-link ${activeTab === 'team' ? 'active' : ''}`}
+              onClick={() => setActiveTab('team')}
             >
-              🔥 Current Tools
+              🎮 Fun Time
             </button>
           </li>
           <li>
             <button
-              className={`nav-link ${activeTab === 'coping' ? 'active' : ''}`}
-              onClick={() => setActiveTab('coping')}
+              className={`nav-link ${activeTab === 'side' ? 'active' : ''}`}
+              onClick={() => setActiveTab('side')}
             >
-              💪 Coping with AI
-            </button>
-          </li>
-          <li>
-            <button
-              className={`nav-link ${activeTab === 'community' ? 'active' : ''}`}
-              onClick={() => setActiveTab('community')}
-            >
-              👥 Community
+              🌙 Another Side
             </button>
           </li>
         </ul>
